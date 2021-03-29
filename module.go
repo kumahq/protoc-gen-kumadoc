@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"embed"
 	"text/template"
 
 	doc "github.com/kumahq/protoc-gen-kumadoc/proto/generated"
@@ -38,6 +39,9 @@ func include(t *template.Template) func(name string, data interface{}) (string, 
 	}
 }
 
+//go:embed templates
+var fs embed.FS
+
 func (m *Module) InitContext(ctx pgs.BuildContext) {
 	m.ModuleBase.InitContext(ctx)
 	m.ctx = pgsgo.InitContext(ctx.Parameters())
@@ -48,7 +52,7 @@ func (m *Module) InitContext(ctx pgs.BuildContext) {
 		"include": include(t),
 	}
 
-	t = template.Must(t.Funcs(sprig.TxtFuncMap()).Funcs(funcMap).ParseGlob("./templates/*.tpl"))
+	t = template.Must(t.Funcs(sprig.TxtFuncMap()).Funcs(funcMap).ParseFS(fs, "templates/*.tpl"))
 
 	m.tpl = map[doc.Config_Type]*template.Template{
 		doc.Config_Policy: t.Lookup("policy.md.tpl"),
