@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package doc;
+
+option go_package = "github.com/kumahq/protoc-gen-kumadoc/proto";
+
+import "google/protobuf/descriptor.proto";
+
+message Config {
+  enum Type {
+    Undefined = 0;
+    Policy = 1;
+  }
+
+  Type type = 10;
+
+  string name = 20;
+  string file_name = 30;
+  string template_name = 40;
+}
+
+extend google.protobuf.FileOptions {
+  Config config = 50001;
+}
+
+extend google.protobuf.FieldOptions {
+  bool required = 50001;
+}
