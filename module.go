@@ -67,11 +67,9 @@ func (m *Module) Execute(targets map[string]pgs.File, _ map[string]pgs.Package) 
 
 		if ok {
 			if tpl, ok := m.tpl[docExt.Type]; ok {
-				m.AddGeneratorTemplateFile(
-					m.ctx.Name(f).String()+".md",
-					tpl,
-					types.ParsePolicy(m.ctx, &docExt, f),
-				)
+				policy := types.ParsePolicy(m.ctx, &docExt, f)
+
+				m.AddGeneratorTemplateFile(policy.FileName, tpl, policy)
 			}
 		}
 	}

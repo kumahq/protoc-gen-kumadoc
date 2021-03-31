@@ -10,12 +10,18 @@ type Policy struct {
 	Name        string
 	Description string
 	Messages    []*Message
+	FileName    string
 }
 
 func ParsePolicy(ctx pgsgo.Context, ext *doc.Config, f pgs.File) *Policy {
 	var name string
 	if name = ext.GetName(); name == "" {
 		name = ctx.Name(f).UpperCamelCase().String()
+	}
+
+	var fileName string
+	if fileName = ext.GetFileName(); fileName == "" {
+		fileName = ctx.Name(f).String()
 	}
 
 	info := f.SourceCodeInfo()
@@ -29,5 +35,6 @@ func ParsePolicy(ctx pgsgo.Context, ext *doc.Config, f pgs.File) *Policy {
 		Name:        name,
 		Description: TrimComments(info.LeadingComments()),
 		Messages:    messages,
+		FileName:    fileName + ".md",
 	}
 }
