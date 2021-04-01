@@ -7,10 +7,11 @@ import (
 )
 
 type Policy struct {
-	Name        string
-	Description string
-	Messages    []*Message
-	FileName    string
+	Name     string
+	Header   string
+	Messages []*Message
+	FileName string
+	Package  string
 }
 
 func ParsePolicy(ctx pgsgo.Context, ext *doc.Config, f pgs.File) *Policy {
@@ -25,16 +26,18 @@ func ParsePolicy(ctx pgsgo.Context, ext *doc.Config, f pgs.File) *Policy {
 	}
 
 	info := f.SourceCodeInfo()
+	policyPackage := f.Package().ProtoName().String()
 
 	var messages []*Message
 	for _, message := range f.Messages() {
-		messages = append(messages, ParseMessage(message))
+		messages = append(messages, ParseMessage(policyPackage, message))
 	}
 
 	return &Policy{
-		Name:        name,
-		Description: TrimComments(info.LeadingComments()),
-		Messages:    messages,
-		FileName:    fileName + ".md",
+		Name:     name,
+		Header:   TrimComments(info.LeadingComments()),
+		Messages: messages,
+		FileName: fileName + ".md",
+		Package:  policyPackage,
 	}
 }

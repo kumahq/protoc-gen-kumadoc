@@ -26,3 +26,7 @@ extend google.protobuf.FileOptions {
 extend google.protobuf.FieldOptions {
   bool required = 50001;
 }
+
+extend google.protobuf.MessageOptions {
+  bool hide = 50001;
+}

@@ -1,44 +1,25 @@
-# {{ .Name }}
+{{- define "field" }}
 
-{{ define "field" }}
-- `{{ .Name | camelcase | untitle }}`
-{{- if .IsRequired }} (required)
-{{- else }} (optional){{ end }}
-{{- if .Description }}
-
-{{ .Description | indent 2 }}
-{{- end -}}
-{{- if .Embed }}
-  {{ range .Embed.Fields }}
-    {{- include "field" . | indent 2 -}}
-  {{- end -}}
-{{- end -}}
-{{- if .IsEnum }}
-
-  Supported values:
-  {{- range .Enum }}
-
-  - `{{ . }}`
-  {{- end }}
+- `{{ .Name | camelcase | untitle }}` ({{ if .IsRequired }}required{{ else }}optional{{ end }}{{ if .IsRepeated }}, repeated{{ end }}){{ if .ShortDescription }} - {{ .ShortDescription }}{{ end }}
+{{- if and .Description (not .HideDescription) }}
+{{ nindent 4 .Description -}}
+{{ end -}}
+{{ if and .IsEmbed (eq .Package .PolicyPackage) }}
+{{ nindent 4 "Child properties:" }}
+{{- range .Embed.Fields }}{{ include "field" . | indent 4 }}{{ end -}}
+{{ end -}}
+{{ if .IsEnum }}
+{{ nindent 4 "Supported values:" }}
+{{- range .Enum }}
+{{ nindent 4 "-" }} `{{ . }}`
 {{- end -}}
 {{ end -}}
-
-{{ define "message" }}
-## {{ .Name -}}
-{{ if .Description }}
-
-{{ .Description }}
 {{ end -}}
 
-{{ range .Fields -}}
-  {{ include "field" . }}
-{{ end }}
+{{- define "message" }}
+{{- indent 0 "## " }}{{ .Name }}
+{{- range .Fields }}{{ template "field" . }}{{ end }}
 {{ end -}}
 
-{{- if .Description -}}
-    {{- .Description -}}
-{{- end }}
-
-{{- range .Messages }}
-  {{ template "message" . }}
-{{- end -}}
+{{- if .Header }}{{ .Header }}{{ end -}}
+{{- range .Messages }}{{ template "message" . }}{{ end }}
