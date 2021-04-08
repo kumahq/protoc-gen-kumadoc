@@ -1,8 +1,7 @@
 package types
 
 import (
-	docs "github.com/kumahq/protoc-gen-kumadoc/proto/generated"
-
+	doc "github.com/kumahq/protoc-gen-kumadoc/proto"
 	pgs "github.com/lyft/protoc-gen-star"
 )
 
@@ -25,7 +24,7 @@ type Field struct {
 func ParseField(policyPackage string, f pgs.Field) *Field {
 	var required bool
 
-	if _, err := f.Extension(docs.E_Required, &required); err != nil {
+	if _, err := f.Extension(doc.E_Required, &required); err != nil {
 		panic(err)
 	}
 

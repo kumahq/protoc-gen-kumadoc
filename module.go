@@ -5,7 +5,7 @@ import (
 	"embed"
 	"text/template"
 
-	doc "github.com/kumahq/protoc-gen-kumadoc/proto/generated"
+	doc "github.com/kumahq/protoc-gen-kumadoc/proto"
 	"github.com/kumahq/protoc-gen-kumadoc/types"
 
 	"github.com/Masterminds/sprig"

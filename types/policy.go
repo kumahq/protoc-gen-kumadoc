@@ -1,7 +1,7 @@
 package types
 
 import (
-	doc "github.com/kumahq/protoc-gen-kumadoc/proto/generated"
+	doc "github.com/kumahq/protoc-gen-kumadoc/proto"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
