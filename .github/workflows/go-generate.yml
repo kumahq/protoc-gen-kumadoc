@@ -1,0 +1,32 @@
+name: Go Generate
+
+on:
+ workflow_dispatch:
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+        
+    - run: sudo apt install protobuf-compiler
+    
+    - run: go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+    
+    - run : mkdir tmp
+
+    - name: Generate
+      run: go generate
+    
+    - name: Commit changes
+      uses: EndBug/add-and-commit@v7
+      with:
+        author_name: ${{github.actor }}
+        author_email: ${{ github.actor }}@users.noreply.github.com
+        message: 'Go Generate'
