@@ -7,7 +7,7 @@ import (
 	doc "github.com/kumahq/protoc-gen-kumadoc/proto"
 )
 
-type Policy struct {
+type Component struct {
 	Name     string
 	Header   string
 	Messages []*Message
@@ -15,7 +15,7 @@ type Policy struct {
 	Package  string
 }
 
-func ParsePolicy(ctx pgsgo.Context, ext *doc.Config, f pgs.File) *Policy {
+func ParseComponent(ctx pgsgo.Context, ext *doc.Config, f pgs.File) *Component {
 	var name string
 	if name = ext.GetName(); name == "" {
 		name = ctx.Name(f).UpperCamelCase().String()
@@ -27,18 +27,18 @@ func ParsePolicy(ctx pgsgo.Context, ext *doc.Config, f pgs.File) *Policy {
 	}
 
 	info := f.SourceCodeInfo()
-	policyPackage := f.Package().ProtoName().String()
+	componentPackage := f.Package().ProtoName().String()
 
 	var messages []*Message
 	for _, message := range f.Messages() {
-		messages = append(messages, ParseMessage(policyPackage, message))
+		messages = append(messages, ParseMessage(componentPackage, message))
 	}
 
-	return &Policy{
+	return &Component{
 		Name:     name,
 		Header:   TrimComments(info.LeadingComments()),
 		Messages: messages,
 		FileName: fileName + ".md",
-		Package:  policyPackage,
+		Package:  componentPackage,
 	}
 }

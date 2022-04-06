@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"embed"
+	"fmt"
+	"strings"
 	"text/template"
 
 	doc "github.com/kumahq/protoc-gen-kumadoc/proto"
@@ -55,7 +57,9 @@ func (m *Module) InitContext(ctx pgs.BuildContext) {
 	t = template.Must(t.Funcs(sprig.TxtFuncMap()).Funcs(funcMap).ParseFS(fs, "templates/*.tpl"))
 
 	m.tpl = map[doc.Config_Type]*template.Template{
-		doc.Config_Policy: t.Lookup("policy.md.tpl"),
+		doc.Config_Policy: t.Lookup("generic.md.tpl"),
+		doc.Config_Proxy:  t.Lookup("generic.md.tpl"),
+		doc.Config_Other:  t.Lookup("generic.md.tpl"),
 	}
 }
 
@@ -67,9 +71,14 @@ func (m *Module) Execute(targets map[string]pgs.File, _ map[string]pgs.Package) 
 
 		if ok {
 			if tpl, ok := m.tpl[docExt.Type]; ok {
-				policy := types.ParsePolicy(m.ctx, &docExt, f)
+				component := types.ParseComponent(m.ctx, &docExt, f)
+				filename := fmt.Sprintf(
+					"%s_%s",
+					strings.ToLower(docExt.Type.String()),
+					component.FileName,
+				)
 
-				m.AddGeneratorTemplateFile(policy.FileName, tpl, policy)
+				m.AddGeneratorTemplateFile(filename, tpl, component)
 			}
 		}
 	}

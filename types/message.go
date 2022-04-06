@@ -7,18 +7,18 @@ import (
 )
 
 type Message struct {
-	Name          string
-	Description   string
-	Fields        []*Field
-	IsHidden      bool
-	PolicyPackage string
+	Name             string
+	Description      string
+	Fields           []*Field
+	IsHidden         bool
+	ComponentPackage string
 }
 
-func ParseMessage(policyPackage string, message pgs.Message) *Message {
+func ParseMessage(componentPackage string, message pgs.Message) *Message {
 	var fields []*Field
 
 	for _, field := range message.Fields() {
-		fields = append(fields, ParseField(policyPackage, field))
+		fields = append(fields, ParseField(componentPackage, field))
 	}
 
 	description := TrimComments(message.SourceCodeInfo().LeadingComments())
@@ -29,10 +29,10 @@ func ParseMessage(policyPackage string, message pgs.Message) *Message {
 	}
 
 	return &Message{
-		Name:          message.Name().String(),
-		Description:   description,
-		Fields:        fields,
-		IsHidden:      isHidden,
-		PolicyPackage: policyPackage,
+		Name:             message.Name().String(),
+		Description:      description,
+		Fields:           fields,
+		IsHidden:         isHidden,
+		ComponentPackage: componentPackage,
 	}
 }
