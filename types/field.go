@@ -19,10 +19,10 @@ type Field struct {
 	Enum             []string
 	IsRepeated       bool
 	Package          string
-	PolicyPackage    string
+	ComponentPackage string
 }
 
-func ParseField(policyPackage string, f pgs.Field) *Field {
+func ParseField(componentPackage string, f pgs.Field) *Field {
 	var required bool
 
 	if _, err := f.Extension(doc.E_Required, &required); err != nil {
@@ -34,18 +34,18 @@ func ParseField(policyPackage string, f pgs.Field) *Field {
 	typ := f.Type()
 
 	field := &Field{
-		Name:          f.Name().String(),
-		Description:   description,
-		ProtoType:     typ.ProtoType().String(),
-		IsRequired:    required,
-		IsRepeated:    typ.IsRepeated(),
-		Package:       f.Package().ProtoName().String(),
-		PolicyPackage: policyPackage,
+		Name:             f.Name().String(),
+		Description:      description,
+		ProtoType:        typ.ProtoType().String(),
+		IsRequired:       required,
+		IsRepeated:       typ.IsRepeated(),
+		Package:          f.Package().ProtoName().String(),
+		ComponentPackage: componentPackage,
 	}
 
 	if typ.IsEmbed() {
 		field.IsEmbed = true
-		field.Embed = ParseMessage(policyPackage, typ.Embed())
+		field.Embed = ParseMessage(componentPackage, typ.Embed())
 		field.Package = typ.Embed().Package().ProtoName().String()
 	}
 

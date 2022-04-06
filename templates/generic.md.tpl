@@ -4,7 +4,7 @@
 {{- if and .Description (not .HideDescription) }}
 {{ nindent 4 .Description -}}
 {{ end -}}
-{{ if and .IsEmbed (eq .Package .PolicyPackage) }}
+{{ if and .IsEmbed (eq .Package .ComponentPackage) }}
 {{ nindent 4 "Child properties:" }}
 {{- range .Embed.Fields }}{{ include "field" . | indent 4 }}{{ end -}}
 {{ end -}}
