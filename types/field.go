@@ -65,5 +65,12 @@ func ParseField(componentPackage string, f pgs.Field) *Field {
 		}
 	}
 
+	if typ.IsRepeated() && typ.Element().IsEmbed() {
+		field.IsEmbed = true
+
+		field.Embed = ParseMessage(componentPackage, typ.Element().Embed())
+		field.Package = typ.Element().Embed().Package().ProtoName().String()
+	}
+
 	return field
 }
