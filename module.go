@@ -10,7 +10,7 @@ import (
 	doc "github.com/kumahq/protoc-gen-kumadoc/proto"
 	"github.com/kumahq/protoc-gen-kumadoc/types"
 
-	"github.com/Masterminds/sprig"
+	"github.com/Masterminds/sprig/v3"
 	pgs "github.com/lyft/protoc-gen-star"
 	pgsgo "github.com/lyft/protoc-gen-star/lang/go"
 )
