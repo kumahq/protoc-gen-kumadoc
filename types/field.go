@@ -34,7 +34,7 @@ func ParseField(componentPackage string, f pgs.Field) *Field {
 	typ := f.Type()
 
 	field := &Field{
-		Name:             f.Name().String(),
+		Name:             f.Descriptor().GetJsonName(),
 		Description:      description,
 		ProtoType:        typ.ProtoType().String(),
 		IsRequired:       required,

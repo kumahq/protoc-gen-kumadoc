@@ -1,6 +1,6 @@
 {{- define "field" }}
 
-- `{{ .Name | camelcase | untitle }}` ({{ if .IsRequired }}required{{ else }}optional{{ end }}{{ if .IsRepeated }}, repeated{{ end }}{{ if .IsEnum }}, enum{{ end }}){{ if .ShortDescription }} - {{ .ShortDescription }}{{ end }}
+- `{{ .Name }}` ({{ if .IsRequired }}required{{ else }}optional{{ end }}{{ if .IsRepeated }}, repeated{{ end }}{{ if .IsEnum }}, enum{{ end }}){{ if .ShortDescription }} - {{ .ShortDescription }}{{ end }}
 {{- if and .Description (not .HideDescription) }}
 {{ nindent 4 .Description -}}
 {{ end -}}
